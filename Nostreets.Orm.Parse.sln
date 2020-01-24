@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nostreets.Extensions", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nostreets.Orm.EF", "..\Nostreets.Orm.EF\Nostreets.Orm.EF.csproj", "{9AEA88F0-5D64-4913-B8BD-5279D1977D37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nostreets.Orm.Ado", "..\Nostreets.Orm.Ado\Nostreets.Orm.Ado\Nostreets.Orm.Ado.csproj", "{6E132F1C-F285-4535-ABEE-F02FC0BD18CB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{9AEA88F0-5D64-4913-B8BD-5279D1977D37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AEA88F0-5D64-4913-B8BD-5279D1977D37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AEA88F0-5D64-4913-B8BD-5279D1977D37}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6E132F1C-F285-4535-ABEE-F02FC0BD18CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6E132F1C-F285-4535-ABEE-F02FC0BD18CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6E132F1C-F285-4535-ABEE-F02FC0BD18CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6E132F1C-F285-4535-ABEE-F02FC0BD18CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
