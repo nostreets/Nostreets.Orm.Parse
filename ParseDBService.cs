@@ -18,14 +18,14 @@ namespace Nostreets.Orm.EF
 {
     public class ParseDBService<T> : IDBService<T> where T : class
     {
-        public ParseDBService(string appKey, string windowsKey = "")
+        public ParseDBService(string appKey)
         {
             ValidateType();
 
             ParseClient.Initialize(new ParseClient.Configuration
             {
                 ApplicationId = appKey,
-                WindowsKey = windowsKey
+                WindowsKey = ""
             });
         }
 
@@ -120,8 +120,13 @@ namespace Nostreets.Orm.EF
 
         public int Count()
         {
+            int result = 0;
+
+
             ParseQuery<ParseObject> query = ParseObject.GetQuery(GetTableName());
-            return query.CountAsync().Result;
+            result = query.CountAsync().Result;
+
+            return result;
         }
 
         public List<T> GetAll()
@@ -168,7 +173,7 @@ namespace Nostreets.Orm.EF
 
             if (pk.PropertyType.Name.Contains("Int"))
                 model.GetType().GetProperty(pk.Name).SetValue(model, Count() + 1);
-            else if (pk.PropertyType.Name == "GUID")
+            else if (pk.PropertyType.Name == "GUID" || pk.PropertyType.Name == "String")
                 model.GetType().GetProperties().SetValue(Guid.NewGuid().ToString(), 0);
 
             ParseObject obj = MapToParseObject(model);
@@ -231,7 +236,7 @@ namespace Nostreets.Orm.EF
                 throw new NullReferenceException("collection");
 
             foreach (T item in collection)
-                 Update(item);
+                Update(item);
         }
 
         public void Update(IEnumerable<T> collection, Converter<T, T> converter)
@@ -248,7 +253,7 @@ namespace Nostreets.Orm.EF
             object id = model.GetPropertyValue(_pkName);
             string stringID = id == typeof(string) ? (string)id : id.ToString();
 
-            ParseQuery <ParseObject> query = ParseObject.GetQuery(GetTableName());
+            ParseQuery<ParseObject> query = ParseObject.GetQuery(GetTableName());
             ParseObject obj = query.GetAsync(stringID).Result;
 
             obj = MapToParseObject(model, obj);
