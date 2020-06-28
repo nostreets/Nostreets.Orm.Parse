@@ -39,6 +39,11 @@ namespace Nostreets.Orm.EF
 
         }
 
+        private bool ShouldNormalize(Type type)
+        {
+            return  type.IsClass ? true : false;
+        }
+
         private string GetPKName(Type type, out string output)
         {
             output = null;
@@ -94,19 +99,31 @@ namespace Nostreets.Orm.EF
 
         }
 
-        private ParseObject MapToParseObject(T obj, ParseObject parseObj = null)
+        private ParseObject MapToParseObject(object obj, ParseObject objToUpdate = null)
         {
-
             if (obj == null)
                 throw new ArgumentNullException("obj");
 
-            ParseObject result = parseObj;
-            Dictionary<string, object> dictionary = typeof(T).GetProperties().ToDictionary(p => p.Name, p => p.GetValue(obj, null));
+            ParseObject result = objToUpdate;
+            PropertyInfo pk = obj.GetType().GetProperty(_pkName);
 
+            var dictionary = 
+                obj.GetType()
+                .GetProperties()
+                .Where(a => pk != a)
+                .ToDictionary(p => p.Name,
+                   p =>
+                   {
+                       object o = p.GetValue(obj, null);
+                       if (ShouldNormalize(p.PropertyType))
+                           return MapToParseObject(o ?? o.Instantiate());
+                       //else if(p.PropertyType.IsCollection() && )
+                       else
+                           return o;
+                   });
 
             foreach (var pair in dictionary)
             {
-
                 if (result == null)
                     result = new ParseObject(GetTableName());
 
@@ -114,6 +131,8 @@ namespace Nostreets.Orm.EF
             }
 
             return result;
+
+
         }
 
 
@@ -122,8 +141,9 @@ namespace Nostreets.Orm.EF
         {
             int result = 0;
 
-
+            ParseObject obj = MapToParseObject((T)typeof(T).Instantiate());
             ParseQuery<ParseObject> query = ParseObject.GetQuery(GetTableName());
+
             result = query.CountAsync().Result;
 
             return result;
